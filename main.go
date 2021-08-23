@@ -1,20 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"kv-store/network"
 	"kv-store/store"
 )
 
 func main() {
-
-	//Placeholder data for testing
-	store.Data[1] = "Dan"
-	store.Data[2] = "Sinead"
-
 	go network.StartTCP()
-
 	go store.RequestHandler()
+	go network.HttpHandleFuncs()
 
-	network.HttpHandleFuncs()
-
+	fmt.Scanln()
 }

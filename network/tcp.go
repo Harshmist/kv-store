@@ -58,11 +58,13 @@ func Handler(conn net.Conn) {
 			store.PostChannel <- string(value)
 			io.WriteString(conn, value+" added!\n")
 		case "LIST":
+
 			for i := 0; i < len(store.Data)+1; i++ {
 				if store.Data[i] != "" {
 					io.WriteString(conn, fmt.Sprint(i)+": "+store.Data[i]+"\n")
 				}
 			}
+
 			// logger.Println("full list of store requested")
 			// counts.Add("Requests", 1)
 		case "SET":

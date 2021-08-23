@@ -10,17 +10,17 @@ import (
 
 func HttpHandleFuncs() {
 
-	http.HandleFunc("/list", listData)
-	http.HandleFunc("/get/", getData)
-	http.HandleFunc("/post/", post)
-	http.HandleFunc("/delete/", delete)
-	http.ListenAndServe(":8000", nil)
+	http.HandleFunc("/list", ListData)
+	http.HandleFunc("/get/", GetData)
+	http.HandleFunc("/post/", Post)
+	http.HandleFunc("/delete/", Delete)
+	http.ListenAndServe(":8001", nil)
 
 }
 
 //HTTP HandleFuncs
 
-func listData(w http.ResponseWriter, r *http.Request) {
+func ListData(w http.ResponseWriter, r *http.Request) {
 
 	for i := 1; i < len(store.Data)+1; i++ {
 		if store.Data[i] != "" {
@@ -31,7 +31,7 @@ func listData(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getData(w http.ResponseWriter, r *http.Request) {
+func GetData(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.String(), "/")
 
 	if len(parts) != 3 {
@@ -51,7 +51,7 @@ func getData(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func post(w http.ResponseWriter, r *http.Request) {
+func Post(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.String(), "/")
 
 	if len(parts) != 3 {
@@ -71,7 +71,7 @@ func post(w http.ResponseWriter, r *http.Request) {
 	store.PostChannel <- value
 }
 
-func delete(w http.ResponseWriter, r *http.Request) {
+func Delete(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.String(), "/")
 
 	if len(parts) != 3 {
