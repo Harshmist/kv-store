@@ -65,8 +65,6 @@ func Handler(conn net.Conn) {
 				}
 			}
 
-			// logger.Println("full list of store requested")
-			// counts.Add("Requests", 1)
 		case "SET":
 			if len(fields) < 3 {
 				io.WriteString(conn, "Format should be <int Key> <string Value> \n")
@@ -93,9 +91,18 @@ func Handler(conn net.Conn) {
 		case "DELETE":
 			keyInt, err := strconv.Atoi(fields[1])
 			if err != nil {
-				log.Fatal("Fatal error")
+				fmt.Print(err)
 			}
 			store.DelChannel <- keyInt
+		case "GET":
+			requested, err := strconv.Atoi(fields[1])
+			if err != nil {
+				fmt.Print(err)
+			}
+			io.WriteString(conn, store.Data[requested])
+		case "STOP":
+			io.WriteString(conn, "Closing connection...")
+			conn.Close()
 		default:
 			io.WriteString(conn, "Invalid Command "+fields[0]+"\n")
 		}
