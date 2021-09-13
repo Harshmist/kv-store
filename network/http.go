@@ -13,6 +13,7 @@ func HttpHandleFuncs() {
 	http.HandleFunc("/post/", Post)
 	http.HandleFunc("/delete/", Delete)
 	http.HandleFunc("/set/", SetData)
+	http.HandleFunc("/list", ListTest)
 	http.ListenAndServe(":8001", nil)
 
 }
@@ -27,7 +28,7 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	key := parts[2]
-	node := nodes.Hash(key) % nodes.NumOfNodes
+	node := nodes.Node(key)
 
 	switch node {
 	case 0:
@@ -54,9 +55,9 @@ func Post(w http.ResponseWriter, r *http.Request) {
 	var postSlice = make([]string, 2, 2)
 	fields := strings.Split(parts[2], " ")
 	key := fields[0]
-	valueSlice := strings.Split(parts[3], "-")
+	valueSlice := strings.Split(parts[3], "%20")
 	value := strings.Join(valueSlice, " ")
-	node := nodes.Hash(key)
+	node := nodes.Node(key)
 
 	postSlice[0] = key
 	postSlice[1] = value
@@ -83,7 +84,7 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	key := parts[2]
-	node := nodes.Hash(key)
+	node := nodes.Node(key)
 
 	switch node {
 	case 0:
@@ -107,7 +108,7 @@ func SetData(w http.ResponseWriter, r *http.Request) {
 
 	var sendData = make([]string, 2, 2)
 	key := fields[0]
-	node := nodes.Hash(key)
+	node := nodes.Node(key)
 	value := strings.Join(fields[1:], " ")
 	sendData[0] = key
 	sendData[1] = value
@@ -115,5 +116,14 @@ func SetData(w http.ResponseWriter, r *http.Request) {
 	switch node {
 	case 0:
 		nodes.Node0Set <- sendData
+	}
+}
+
+func ListTest(w http.ResponseWriter, r *http.Request) {
+	for _, v := range nodes.Data3 {
+		fmt.Fprintf(w, fmt.Sprintf("value from Data 3: %v\n", v))
+	}
+	for _, v := range nodes.Data2 {
+		fmt.Fprintf(w, fmt.Sprintf("value from Data 2: %v\n", v))
 	}
 }

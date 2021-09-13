@@ -33,7 +33,11 @@ var (
 func Hash(s string) uint64 {
 	h := fnv.New64a()
 	h.Write([]byte(s))
-	return h.Sum64() % NumOfNodes
+	return h.Sum64()
+}
+
+func Node(s string) uint64 {
+	return Hash(s) % NumOfNodes
 }
 
 func Node0() {
