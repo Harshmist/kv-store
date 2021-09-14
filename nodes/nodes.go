@@ -1,32 +1,21 @@
 package nodes
 
-import "hash/fnv"
+import (
+	"fmt"
+	"hash/fnv"
+	"strings"
+)
 
 var (
-	NumOfNodes uint64 = 4
-
-	// Node 0
-	Data0       = make(map[string]string)
-	Node0Post   = make(chan []string)
-	Node0Set    = make(chan []string)
-	Node0Delete = make(chan string)
-
-	//Node 1
-	Data1       = make(map[string]string)
-	Node1Post   = make(chan []string)
-	Node1Set    = make(chan []string)
-	Node1Delete = make(chan string)
-	//Node 2
-	Data2       = make(map[string]string)
-	Node2Post   = make(chan []string)
-	Node2Set    = make(chan []string)
-	Node2Delete = make(chan string)
-	//Node 3
-	Data3       = make(map[string]string)
-	Node3Post   = make(chan []string)
-	Node3Set    = make(chan []string)
-	Node3Delete = make(chan string)
+	NumOfNodes   uint64
+	ChannelSlice = make([]chan UserRequest, 0, 10)
 )
+
+type UserRequest struct {
+	Action string
+	Key    string
+	Value  string
+}
 
 //Hash Function
 
@@ -40,95 +29,25 @@ func Node(s string) uint64 {
 	return Hash(s) % NumOfNodes
 }
 
-func Node0() {
+func Nodes(ch chan UserRequest) {
+	Data := make(map[string]string)
 
 	for {
 		select {
-		case postRequest := <-Node0Post:
-			k := postRequest[0]
-			v := postRequest[1]
-			Data0[k] = v
-
-		case setRequest := <-Node0Set:
-			k := setRequest[0]
-			v := setRequest[1]
-			Data0[k] = v
-
-		case delRequest := <-Node0Delete:
-			k := delRequest
-
-			delete(Data0, k)
-
-		}
-	}
-
-}
-func Node1() {
-
-	for {
-		select {
-		case postRequest := <-Node1Post:
-			k := postRequest[0]
-			v := postRequest[1]
-			Data1[k] = v
-
-		case setRequest := <-Node1Set:
-			k := setRequest[0]
-			v := setRequest[1]
-			Data1[k] = v
-
-		case delRequest := <-Node1Delete:
-			k := delRequest
-
-			delete(Data1, k)
-
-		}
-	}
-
-}
-
-func Node2() {
-
-	for {
-		select {
-		case postRequest := <-Node2Post:
-			k := postRequest[0]
-			v := postRequest[1]
-			Data2[k] = v
-
-		case setRequest := <-Node2Set:
-			k := setRequest[0]
-			v := setRequest[1]
-			Data2[k] = v
-
-		case delRequest := <-Node2Delete:
-			k := delRequest
-
-			delete(Data2, k)
-
-		}
-	}
-
-}
-func Node3() {
-
-	for {
-		select {
-		case postRequest := <-Node3Post:
-			k := postRequest[0]
-			v := postRequest[1]
-			Data3[k] = v
-
-		case setRequest := <-Node3Set:
-			k := setRequest[0]
-			v := setRequest[1]
-			Data3[k] = v
-
-		case delRequest := <-Node3Delete:
-			k := delRequest
-
-			delete(Data3, k)
-
+		case request := <-ch:
+			action := strings.ToUpper(request.Action)
+			key := request.Key
+			value := request.Value
+			switch action {
+			case "DELETE":
+				delete(Data, key)
+			case "POST":
+				Data[key] = value
+				fmt.Println(Data)
+				fmt.Println(ChannelSlice)
+			case "SET":
+				Data[key] = value
+			}
 		}
 	}
 
