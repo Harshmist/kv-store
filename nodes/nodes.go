@@ -55,9 +55,9 @@ func Node0() {
 			Data0[k] = v
 
 		case delRequest := <-Node0Delete:
-			k := delRequest[0]
+			k := delRequest
 
-			delete(Data0, string(k))
+			delete(Data0, k)
 
 		}
 	}
@@ -78,9 +78,9 @@ func Node1() {
 			Data1[k] = v
 
 		case delRequest := <-Node1Delete:
-			k := delRequest[0]
+			k := delRequest
 
-			delete(Data1, string(k))
+			delete(Data1, k)
 
 		}
 	}
@@ -102,9 +102,9 @@ func Node2() {
 			Data2[k] = v
 
 		case delRequest := <-Node2Delete:
-			k := delRequest[0]
+			k := delRequest
 
-			delete(Data2, string(k))
+			delete(Data2, k)
 
 		}
 	}
@@ -125,9 +125,9 @@ func Node3() {
 			Data3[k] = v
 
 		case delRequest := <-Node3Delete:
-			k := delRequest[0]
+			k := delRequest
 
-			delete(Data3, string(k))
+			delete(Data3, k)
 
 		}
 	}
