@@ -11,17 +11,16 @@ var (
 	numOfNodes = flag.Uint64("nodes", 4, "Number of nodes to be created")
 )
 
-func init() {
+func main() {
+	flag.Parse()
 	nodes.NumOfNodes = *numOfNodes
 	for i := 0; i < int(*numOfNodes); i++ {
 		channel := make(chan nodes.UserRequest)
 		nodes.ChannelSlice = append(nodes.ChannelSlice, channel)
 		go nodes.Nodes(channel)
-	}
-}
 
-func main() {
-	flag.Parse()
+	}
+
 	//go network.HttpHandleFuncs()
 	go network.StartTCP()
 	//go network.StartUDP()
