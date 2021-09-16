@@ -23,7 +23,7 @@ func main() {
 
 	go network.HttpHandleFuncs()
 	go network.StartTCP()
-	//go network.StartUDP()
+	go network.StartUDP()
 
 	fmt.Println(*numOfNodes)
 
