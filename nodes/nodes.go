@@ -50,12 +50,14 @@ func Nodes(ch chan UserRequest) {
 				Data[key] = value
 				rtnMsg := fmt.Sprintf("Key: %v created and set to: %v\n", key, value)
 				request.RtnChan <- rtnMsg
+
 			case "SET":
 				Data[key] = value
 				rtnMsg := fmt.Sprintf("Key :%v now set to: %v\n", key, value)
 				request.RtnChan <- rtnMsg
 
 			case "GET":
+				fmt.Println("got here 4")
 				key := request.Key
 				request.RtnChan <- fmt.Sprintf("%v: %v\n", key, Data[key])
 			case "LIST":

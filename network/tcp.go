@@ -63,21 +63,20 @@ func Handler(conn net.Conn) {
 		userRequest.RtnChan = rtnChan
 		userRequest.Node = node
 
-		go msgReciever(rtnChan, conn)
+		go msgReceiver(rtnChan, conn)
 
 		nodes.ChannelSlice[node] <- userRequest
 	}
 
 }
 
-func msgReciever(ch chan string, conn net.Conn) {
-	go func() {
-		for {
-			select {
-			case printString := <-ch:
-				io.WriteString(conn, printString)
-				return
-			}
+func msgReceiver(ch chan string, conn net.Conn) {
+	for {
+		select {
+		case printString := <-ch:
+			io.WriteString(conn, printString)
+			return
 		}
-	}()
+	}
+
 }

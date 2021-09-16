@@ -21,7 +21,7 @@ func main() {
 
 	}
 
-	//go network.HttpHandleFuncs()
+	go network.HttpHandleFuncs()
 	go network.StartTCP()
 	//go network.StartUDP()
 
